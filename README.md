@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📈 Stock Price Prediction using Machine Learning
 
 A professional, end-to-end Machine Learning project that predicts stock prices using **Linear Regression**, **Random Forest**, and **LSTM (Deep Learning)** models on historical market data from Yahoo Finance. Comes with a beautiful **Flask web dashboard** for interactive predictions and visualizations.
@@ -197,3 +198,7 @@ MIT © 2026 — Built with ❤️ for ML enthusiasts.
 
 ## ⚠️ Disclaimer
 This project is for **educational purposes only**. Stock predictions are inherently uncertain — **do not use this as financial advice**.
+=======
+# StockSense-AI-Advanced-Stock-Price-Prediction-Financial-Forecasting-Platform
+An AI-powered stock market forecasting platform built using Flask, Machine Learning, TensorFlow, and financial technical indicators. The system predicts future stock prices using Linear Regression, Random Forest, and LSTM models while visualizing insights through an interactive dark-themed analytics dashboard.
+>>>>>>> 8d2d328e234a3185261db8f76507ce715d65124e

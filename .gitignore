@@ -1,10 +1,8 @@
 venv/
-__pycache__/
+**pycache**/
 *.pyc
-*.pkl
 .env
+models/
+outputs/
+data/
 .ipynb_checkpoints/
-outputs/*.png
-models/*.pkl
-.DS_Store
-.vscode/
