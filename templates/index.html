@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>📈 Stock Price Predictor — ML Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="logo">📈</span>
+    <div>
+      <h1>StockSense AI</h1>
+      <p>ML-powered stock price forecasting</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="controls card">
+    <div class="field">
+      <label>Ticker Symbol</label>
+      <input id="ticker" type="text" value="AAPL" placeholder="e.g. AAPL, TSLA, INFY.NS"/>
+    </div>
+    <div class="field">
+      <label>Model</label>
+      <select id="model">
+        <option value="random_forest">Random Forest</option>
+        <option value="linear">Linear Regression</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Forecast Days</label>
+      <input id="days" type="number" min="1" max="30" value="7"/>
+    </div>
+    <button id="run">🔮 Predict</button>
+  </section>
+
+  <section id="status" class="status"></section>
+
+  <section id="results" class="results hidden">
+    <div class="metrics card">
+      <div class="metric"><span>Last Close</span><strong id="m-last">—</strong></div>
+      <div class="metric"><span>RMSE</span><strong id="m-rmse">—</strong></div>
+      <div class="metric"><span>MAE</span><strong id="m-mae">—</strong></div>
+      <div class="metric"><span>R² Score</span><strong id="m-r2">—</strong></div>
+    </div>
+
+    <div class="chart-wrap card">
+      <canvas id="chart"></canvas>
+    </div>
+
+    <div class="forecast-table card">
+      <h3>🔮 Forecast</h3>
+      <table>
+        <thead><tr><th>Date</th><th>Predicted Price</th></tr></thead>
+        <tbody id="forecast-body"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Built with ❤️ using Python, Flask & Scikit-Learn • Educational use only — not financial advice.</p>
+</footer>
+
+<script>
+let chart;
+const $ = id => document.getElementById(id);
+
+$("run").addEventListener("click", async () => {
+  const ticker = $("ticker").value.trim().toUpperCase();
+  const model = $("model").value;
+  const days = parseInt($("days").value, 10);
+  if (!ticker) return;
+
+  $("status").textContent = "⏳ Fetching data & training model...";
+  $("status").className = "status loading";
+  $("results").classList.add("hidden");
+
+  try {
+    const res = await fetch("/api/predict", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ticker, model, days}),
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+
+    $("status").textContent = `✅ ${data.ticker} — Model: ${data.model}`;
+    $("status").className = "status success";
+    $("results").classList.remove("hidden");
+
+    $("m-last").textContent = "$" + data.last_close;
+    $("m-rmse").textContent = data.metrics.rmse;
+    $("m-mae").textContent = data.metrics.mae;
+    $("m-r2").textContent = data.metrics.r2;
+
+    const labels = [...data.history_dates, ...data.forecast_dates];
+    const historical = [...data.history_prices, ...Array(data.forecast_prices.length).fill(null)];
+    const predicted = [...Array(data.history_prices.length - 1).fill(null),
+                       data.history_prices[data.history_prices.length-1],
+                       ...data.forecast_prices];
+
+    if (chart) chart.destroy();
+    chart = new Chart($("chart"), {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {label: "Historical", data: historical, borderColor: "#22d3ee", backgroundColor: "rgba(34,211,238,0.1)", tension: 0.25, fill: true, pointRadius: 0},
+          {label: "Forecast",   data: predicted,   borderColor: "#f59e0b", borderDash:[6,4], tension: 0.25, pointRadius: 3, pointBackgroundColor: "#f59e0b"},
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {legend: {labels: {color:"#e2e8f0"}}, tooltip: {mode:"index", intersect:false}},
+        scales: {
+          x: {ticks:{color:"#94a3b8", maxTicksLimit:10}, grid:{color:"rgba(148,163,184,0.1)"}},
+          y: {ticks:{color:"#94a3b8"}, grid:{color:"rgba(148,163,184,0.1)"}}
+        }
+      }
+    });
+
+    const tbody = $("forecast-body");
+    tbody.innerHTML = "";
+    data.forecast_dates.forEach((d, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${d}</td><td>$${data.forecast_prices[i]}</td>`;
+      tbody.appendChild(tr);
+    });
+  } catch(e) {
+    $("status").textContent = "❌ " + e.message;
+    $("status").className = "status error";
+  }
+});
+
+// Auto-run on load
+window.addEventListener("load", () => $("run").click());
+</script>
+</body>
+</html>
