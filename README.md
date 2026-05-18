@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-# 📈 Stock Price Prediction using Machine Learning
+
+# 📈StockSense AI — Advanced Stock Price Prediction & Financial Forecasting Platform
 
 A professional, end-to-end Machine Learning project that predicts stock prices using **Linear Regression**, **Random Forest**, and **LSTM (Deep Learning)** models on historical market data from Yahoo Finance. Comes with a beautiful **Flask web dashboard** for interactive predictions and visualizations.
 
@@ -66,7 +66,7 @@ Or: `File → Open Folder → select stock-price-prediction`
 ### 3. Create a virtual environment
 Open the VS Code terminal (`Ctrl + ~`) and run:
 
-**Windows (PowerShell):**
+**Windows (cmd):**
 ```powershell
 python -m venv venv
 venv\Scripts\activate
@@ -193,12 +193,14 @@ Refresh your GitHub repo page — all files should be there.
 
 ---
 
+Author
+
+Jayant TN
+<Linkedin>https://www.linkedin.com/in/jayant-tn-72759b243/
+
 ## 📝 License
 MIT © 2026 — Built with ❤️ for ML enthusiasts.
 
 ## ⚠️ Disclaimer
 This project is for **educational purposes only**. Stock predictions are inherently uncertain — **do not use this as financial advice**.
-=======
-# StockSense-AI-Advanced-Stock-Price-Prediction-Financial-Forecasting-Platform
-An AI-powered stock market forecasting platform built using Flask, Machine Learning, TensorFlow, and financial technical indicators. The system predicts future stock prices using Linear Regression, Random Forest, and LSTM models while visualizing insights through an interactive dark-themed analytics dashboard.
->>>>>>> 8d2d328e234a3185261db8f76507ce715d65124e
+
