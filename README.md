@@ -276,7 +276,7 @@ This project demonstrates practical implementation of:
 AI & Machine Learning Enthusiast
 
 GitHub:
-https://github.com/Userjayant
+[linkedin](https://github.com/Userjayant)
 
 ---
 
